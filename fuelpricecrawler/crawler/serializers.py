@@ -18,7 +18,6 @@ class LocationSerializer(serializers.ModelSerializer):
         city_data = validated_data.get('city')
         state_data = validated_data.get('state')
         fuelprices = validated_data.get('fuel_prices')
-
         
         city_obj, created = Location.objects.update_or_create(
             city=city_data,
@@ -32,5 +31,5 @@ class LocationSerializer(serializers.ModelSerializer):
                 date=fuelprice['date'],
                 defaults={'price': fuelprice['price']}
             )
-
+        
         return city_obj
