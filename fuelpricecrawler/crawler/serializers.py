@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from crawler.models.fuelprice import *
+from crawler.models.fuelprice import Location, FuelPrice
 
 class FuelPriceSerializer(serializers.ModelSerializer):
     class Meta:

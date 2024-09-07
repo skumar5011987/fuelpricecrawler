@@ -49,10 +49,7 @@ class CrawlAPIView(BaseAPIView):
         
         try:
             results = crawl_fuelprices()
-            for rec in results:
-                serializer = LocationSerializer(data=rec)
-                if serializer.is_valid():
-                    obj = serializer.create_fuelprice(serializer.validated_data)
+            Location.create_data(results)
             return APIResponse(SUCCESS)
         except Exception as e:
             print(f"Error while crawling: error msg: {e}")

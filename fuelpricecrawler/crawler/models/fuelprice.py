@@ -7,6 +7,15 @@ class Location(models.Model):
     def __str__(self):
         return f"{self.city}"
     
+    @staticmethod
+    def create_data(results):
+        from ..serializers import LocationSerializer
+        
+        for rec in results:
+            serializer = LocationSerializer(data=rec)
+            if serializer.is_valid():
+                obj = serializer.create_fuelprice(serializer.validated_data)
+    
 class FuelPrice(models.Model):
     
     city = models.ForeignKey(Location, related_name="fuel_prices", on_delete=models.CASCADE)
