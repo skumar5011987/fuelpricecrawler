@@ -12,6 +12,7 @@ base_url = "https://www.ndtv.com/fuel-prices"
 CITIES = []
 TARGET_URLS = []
 DATA=[]
+
 chrome_options = Options()
 chrome_options.add_argument("--headless") 
 chrome_options.add_argument("--ignore-certificate-errors")
@@ -24,12 +25,6 @@ def parse_page_url(city):
     city = "-".join(city.lower().split(" "))
     url = f"{base_url}/petrol-price-in-{city}-city"
     return url
-
-def get_city(url):
-    
-    city = url.split("/")[-1].replace(f"petrol-price-in-", "").replace("-city", "")
-    city = " ".join(city.split("-")).title()
-    return city
 
 
 def get_page_content(page_url):
@@ -44,6 +39,7 @@ def get_page_content(page_url):
         page_source = driver.page_source
         # get page source
         soup = BeautifulSoup(page_source, "html.parser")
+        print(f"[Info]: Crawling '{page_url}'")
         return soup
     except Exception as e:
         print(f"Exception while crawling : {page_url}")
@@ -57,7 +53,6 @@ def crawl_fuelprices():
     for city in cities:
         CITIES.append(city.get_text())
     
-    print(f"Cities:{CITIES}")
     for city in CITIES:
         url = parse_page_url(city)
         
@@ -66,7 +61,6 @@ def crawl_fuelprices():
             if r is None:
                 continue
             
-            print(f"[Info]: Crawling '{url}'")
             state = r.find('span', class_="brdCrumb").find_all('a')[2].get_text()
             last10_days_fp_tbl = r.find_all('table')[0]
             rows = last10_days_fp_tbl.find_all("tr")
