@@ -9,4 +9,3 @@ def parse_date(date_str=""):
 def parse_price(price=""):
     p = price.split(" ")[0]
     return Decimal(p)
-    pass
