@@ -12,7 +12,12 @@ class HomeAPIView(views.APIView):
 class ListCitiesAPIView(generics.ListAPIView):
     
     def get(self, request):
-        cities = list(Location.objects.all().values_list("city", flat=True))
+        cache_key = "cities"
+        cities = cache.get(cache_key)
+        if not cities:
+            cities = list(Location.objects.all().values_list("city", flat=True))
+            cache.set(cache_key, cities, timeout=6*60*60)
+            
         return APIResponse(SUCCESS, message="Available cities", data=cities)
     
 class FuelPricesAPIView(generics.ListAPIView):
@@ -23,13 +28,19 @@ class FuelPricesAPIView(generics.ListAPIView):
         if not city:
             return APIResponse(FAIL, message="Please provide city name.")
         
-        qs = Location.objects.filter(city__iexact=city)
-        if state:
-            state = " ".join(state.split("-")).title()
-            qs = qs.filter(state=state)
-        
-        serializer = LocationSerializer(qs, many=True)        
-        return APIResponse(SUCCESS, data=serializer.data)
+        cache_key = city
+        data = cache.get(cache_key)
+        if not data:
+            
+            qs = Location.objects.filter(city__iexact=city)
+            if state:
+                state = " ".join(state.split("-")).title()
+                qs = qs.filter(state=state)
+            
+            data = LocationSerializer(qs, many=True).data
+            cache.set(cache_key, data, timeout=6*60*60)
+            
+        return APIResponse(SUCCESS, data=data)
 
 
 class CrawlAPIView(BaseAPIView):
