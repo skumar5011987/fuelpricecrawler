@@ -4,7 +4,7 @@ from crawler.models.fuelprice import Location, FuelPrice
 
 class FuelPriceInline(admin.TabularInline):
     model = FuelPrice
-    extra = 1
+    extra = 0
 
 class LocationAdmin(admin.ModelAdmin):
     list_display = ['city', 'state']
