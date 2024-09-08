@@ -11,10 +11,9 @@ class Location(models.Model):
     def create_data(results):
         from ..serializers import LocationSerializer
         
-        for rec in results:
-            serializer = LocationSerializer(data=rec)
-            if serializer.is_valid():
-                obj = serializer.create_fuelprice(serializer.validated_data)
+        serializer = LocationSerializer(data=results)
+        if serializer.is_valid():
+            obj = serializer.create_fuelprice(serializer.validated_data)
     
 class FuelPrice(models.Model):
     

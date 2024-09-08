@@ -1,5 +1,8 @@
+import time
 from fuelpricecrawler.views import (BaseAPIView, APIResponse ,SUCCESS, FAIL,)
-from crawler.scripts.ndtv_crawler import crawl_fuelprices
+from crawler.scripts.ndtv_crawler import (
+    get_available_cities, parse_page_url, extract_fuelprice_history, get_page_content
+    )
 from crawler.models.fuelprice import Location
 from .serializers import LocationSerializer
 from rest_framework import generics, views
@@ -48,8 +51,20 @@ class CrawlAPIView(BaseAPIView):
     def post(self, request):
         
         try:
-            results = crawl_fuelprices()
-            Location.create_data(results)
+            cities = get_available_cities()
+            for city in cities:
+                url = parse_page_url(city)
+                
+                print(f"[Info]: Crawling '{url}'")
+                time.sleep(1)
+                content = get_page_content(url)
+                if content is None:
+                    # can rescedule for this page url
+                    continue
+                
+                data = extract_fuelprice_history(city, content)
+                
+                Location.create_data(data)
             return APIResponse(SUCCESS)
         except Exception as e:
             print(f"Error while crawling: error msg: {e}")
