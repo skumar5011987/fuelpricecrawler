@@ -28,9 +28,10 @@ class ListCitiesAPIView(generics.ListAPIView):
     
 class FuelPricesAPIView(generics.ListAPIView):
     
-    def get(self, request, city="", state=""):
+    def get(self, request):
         params = request.query_params.copy()
-        city = " ".join(city.split("-")).title()
+        city, state = params.get("city",""), params.get("state","")
+        city, state = " ".join(city.split("-")).title(), " ".join(state.split("-")).title()
         if not city:
             return APIResponse(FAIL, message="Please provide city name.")
         
@@ -40,11 +41,10 @@ class FuelPricesAPIView(generics.ListAPIView):
             
             qs = Location.objects.filter(city__iexact=city)
             if state:
-                state = " ".join(state.split("-")).title()
                 qs = qs.filter(state=state)
             
             data = LocationSerializer(qs, many=True).data
-            cache.set(cache_key, data, timeout=6*60*60)
+            cache.set(cache_key, data, timeout=3*60*60)
             
         return APIResponse(SUCCESS, data=data)
 
