@@ -13,10 +13,10 @@ class LocationAdmin(admin.ModelAdmin):
 
 admin.site.register(Location, LocationAdmin)
 
-class FuelPriceAdmin(admin.ModelAdmin):
-    list_display = ['city', 'fuel', 'date', 'price']
-    list_filter = ['city',]
-    search_fields = ['city__city', "city__state",]
-    ordering = ['-date']
+# class FuelPriceAdmin(admin.ModelAdmin):
+#     list_display = ['city', 'fuel', 'date', 'price']
+#     list_filter = ['city',]
+#     search_fields = ['city__city', "city__state",]
+#     ordering = ['-date']
 
-admin.site.register(FuelPrice, FuelPriceAdmin)
+# admin.site.register(FuelPrice, FuelPriceAdmin)
