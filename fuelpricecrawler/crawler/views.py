@@ -52,9 +52,10 @@ class FuelPricesAPIView(generics.ListAPIView):
 class CrawlAPIView(BaseAPIView):
     
     def post(self, request):
+        from fuelpricecrawler.celery import crwal_fuelprices
         
         try:
-            cities = get_available_cities()
+            cities = ["Kargil",] # get_available_cities()
         except Exception as exc:
             _logger.error(f"Exception: {exc}")
             return APIResponse(FAIL)
@@ -66,14 +67,11 @@ class CrawlAPIView(BaseAPIView):
                 _logger.error(f"[Info]: Crawling '{url}'")
                 time.sleep(1)
                 content = get_page_content(url)
-                if content is None:
-                    # can rescedule for this page url
-                    continue
-                
                 data = extract_fuelprice_history(city, content)
                 Location.create_data(data)
             except Exception as e:
                 _logger.error(f"[Error]: Crawling '{url}'")
-                
+                _logger.info(f"Scheduling to crawl '{url}'")
+                crwal_fuelprices.apply_async(city=city, countdown=10)
         
         return APIResponse(SUCCESS)

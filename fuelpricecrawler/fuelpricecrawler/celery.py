@@ -41,8 +41,8 @@ def handle_task_failure(**kwargs):
 @app.task(name="crawl_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
 def crwal_fuelprices(city="", page_url=""):
     
-    if not (city and page_url):
-        _logger.error(f"City & Page url is required.")
+    if not (city ):
+        _logger.error(f"City name is required.")
         return
     
     try:
@@ -57,6 +57,6 @@ def crwal_fuelprices(city="", page_url=""):
         Location.create_data(data)
     except Exception as exc:
         _logger.exception(exc)
-        crwal_fuelprices.apply_async(city, url, countdown=10, exc=exc)
+        crwal_fuelprices.retry(countdown=10, exc=exc)
     
 

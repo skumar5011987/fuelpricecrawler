@@ -1,5 +1,6 @@
 import time
 from django.core.management import BaseCommand
+from fuelpricecrawler.celery import crwal_fuelprices
 
 
 
@@ -23,13 +24,12 @@ class Command(BaseCommand):
                 url = parse_page_url(city)
                 self.stdout.write(self.style.SUCCESS(f"[Info]: Crawling '{url}'"))
                 content = get_page_content(url)
-                if content is None:
-                    # can rescedule for this page url
-                    continue
                 
                 data = extract_fuelprice_history(city, content)
                 Location.create_data(data)
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"[Error]: Crawling '{url}'"))
+                self.stdout.write(self.style.INFO(f"Scheduling to crawl '{url}'"))
+                crwal_fuelprices.apply_async(city=city, countdown=120)
             
         self.stdout.write(self.style.SUCCESS("Completed"))
