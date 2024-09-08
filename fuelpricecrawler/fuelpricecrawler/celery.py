@@ -7,10 +7,9 @@ from celery.utils.log import get_task_logger
 
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fuelpricecrawler.settings')
-_logger = get_task_logger(__name__)
 
 app = Celery('fuelpricecrawler')
-app.conf.inable_utc=False
+app.conf.enable_utc=False
 app.conf.update(timezone='Asia/Kolkata')
 app.config_from_object(settings, namespace='CELERY')
 app.autodiscover_tasks()
