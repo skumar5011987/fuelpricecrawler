@@ -65,6 +65,12 @@ Installation and Setup:
 7. Start the development server:
     python manage.py runserver
 
+8. Makesure redis is up and running
+    redis-cli ping
+    PONG
+    OR
+    first install and run redis server
+
 API Endpoints
 1. Home
     URL: http://localhost:8000
