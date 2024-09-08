@@ -55,7 +55,7 @@ class CrawlAPIView(BaseAPIView):
         from fuelpricecrawler.celery import crwal_fuelprices
         
         try:
-            cities = ["Kargil",] # get_available_cities()
+            cities = get_available_cities()
         except Exception as exc:
             _logger.error(f"Exception: {exc}")
             return APIResponse(FAIL)
