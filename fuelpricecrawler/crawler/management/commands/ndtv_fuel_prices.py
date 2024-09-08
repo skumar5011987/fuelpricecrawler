@@ -1,6 +1,6 @@
 import time
 from django.core.management import BaseCommand
-from fuelpricecrawler.celery import crwal_fuelprices
+from crawler.tasks import crwal_ndtv_fuelprices
 
 
 
@@ -19,7 +19,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f"[Error]: Can't extract cities list."))
             return
         
-        for city in cities:
+        for city in cities[:2]:
             try:
                 url = parse_page_url(city)
                 self.stdout.write(self.style.SUCCESS(f"[Info]: Crawling '{url}'"))
@@ -30,6 +30,6 @@ class Command(BaseCommand):
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"[Error]: Crawling '{url}'"))
                 self.stdout.write(self.style.INFO(f"Scheduling to crawl '{url}'"))
-                crwal_fuelprices.apply_async(city=city, countdown=120)
+                crwal_ndtv_fuelprices.delay(city=str(city))
             
         self.stdout.write(self.style.SUCCESS("Completed"))

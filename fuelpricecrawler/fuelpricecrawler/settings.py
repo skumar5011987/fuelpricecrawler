@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'crawler',
+    'django_celery_beat',
 ]
 
 MIDDLEWARE = [
@@ -109,62 +110,41 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "handlers": {
+        "file": {
+            "level": "INFO",
+            "class": "logging.FileHandler",
+            "filename": "info.log",
+        },
         "console": {
+            "level": "INFO",
             "class": "logging.StreamHandler",
-            "level": "ERROR",
         },
     },
     "loggers": {
-        "": {
-            "handlers": ["console"],
-            "level": "ERROR",
-        },
         "django": {
-            "handlers": ["console"],
-            "level": "ERROR",
+            "handlers": ["file", "console"],
+            "level": "INFO",
+            "propagate": True,
         },
         "celery": {
             "handlers": ["console"],
-            "level": "ERROR",
+            "level": "INFO",
+            "propagate": True,
+        },
+        "crawler": {
+            "handlers": ["file", "console"],
+            "level": "INFO",
             "propagate": True,
         },
     },
 }
-if DEBUG:
-    LOGGING = {
-        "version": 1,
-        "disable_existing_loggers": True,
-        "handlers": {
-            "file": {
-                "level": "INFO",
-                "class": "logging.FileHandler",
-                "filename": "info.log",
-            },
-            "console": {
-                "level": "INFO",
-                "class": "logging.StreamHandler",
-            },
-        },
-        "loggers": {
-            "django": {
-                "handlers": ["file", "console"],
-                "level": "INFO",
-                "propagate": True,
-            },
-            "crawler": {
-                "handlers": ["file", "console"],
-                "level": "INFO",
-                "propagate": True,
-            },
-        },
-    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Asia/Kolkata'
 
 USE_I18N = True
 
@@ -181,16 +161,20 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
+
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
+result_backend = 'redis://localhost:6379'
+RESULT_SERIALIZER = "json"
+CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
+
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379/0',
+        'LOCATION': 'redis://localhost:6379',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }
     }
 }
 
-CELERY_BROKER_URL = 'redis://localhost:6379/0'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
-CELERY_TIMEZONE = 'UTC'
+

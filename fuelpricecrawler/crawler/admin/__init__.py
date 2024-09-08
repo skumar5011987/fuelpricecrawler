@@ -1,1 +1,1 @@
-from .fuelprice import FuelPriceAdmin
+from . import fuelprice
