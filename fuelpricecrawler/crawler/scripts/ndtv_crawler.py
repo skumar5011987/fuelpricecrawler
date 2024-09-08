@@ -76,3 +76,5 @@ def get_available_cities():
         CITIES.append(city.get_text())
     
     return CITIES
+
+driver.quit()
