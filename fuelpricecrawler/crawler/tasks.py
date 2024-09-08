@@ -8,7 +8,11 @@ _logger = logging.getLogger(__name__)
 
 @app.task
 def run_ndtv_fuel_prices():
-    call_command('ndtv_fuel_prices') 
+    try:
+        call_command('ndtv_fuel_prices')
+    except Exception as e:
+        _logger.error(f"Exception in run_ndtv_fuel_prices: {e}")
+        raise
 
 
 @app.task(name="crawl_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
