@@ -29,7 +29,7 @@ class Command(BaseCommand):
                 Location.create_data(data)
             except Exception as e:
                 self.stdout.write(self.style.ERROR(f"[Error]: Crawling '{url}'"))
-                self.stdout.write(self.style.INFO(f"Scheduling to crawl '{url}'"))
+                self.stdout.write(self.style.WARNING(f"Scheduling to crawl '{url}'"))
                 crwal_ndtv_fuelprices.delay(city=str(city))
             
         self.stdout.write(self.style.SUCCESS("Completed"))
