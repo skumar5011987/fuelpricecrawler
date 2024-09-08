@@ -4,7 +4,7 @@ from django.core.management import BaseCommand
 
 
 class Command(BaseCommand):
-    help = "This command crawls the fuel prices from ndtv.com/fuel-prices"
+    help = "This command crawls for cities and then the fuel price history from ndtv.com/fuel-prices"
     
     def handle(self, *args, **kwargs):
         from crawler.scripts.ndtv_crawler import get_available_cities
