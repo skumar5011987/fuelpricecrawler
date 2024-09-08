@@ -17,7 +17,7 @@ chrome_options = Options()
 chrome_options.add_argument("--headless") 
 chrome_options.add_argument("--ignore-certificate-errors")
 
-service = Service(ChromeDriverManager().install())
+service = Service(ChromeDriverManager(driver_version="128.0.6613.120").install())
 driver = webdriver.Chrome(service=service, options=chrome_options)
 
 def parse_page_url(city):
@@ -76,5 +76,3 @@ def get_available_cities():
         CITIES.append(city.get_text())
     
     return CITIES
-
-driver.quit()
