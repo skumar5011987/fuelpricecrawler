@@ -26,18 +26,23 @@ app.conf.beat_schedule = {
 }
 
 @task_failure.connect
-def handle_task_failure(**kwargs):
+def handle_task_failure(sender=None, task_id=None, exception=None, traceback=None, **kwargs):
     from traceback import format_tb
-
+    
+    if isinstance(traceback, str):
+        formatted_traceback = traceback
+    else:
+        formatted_traceback = "".join(format_tb(traceback))
+    
     _logger.error(
         "[task:%s:%s]"
         % (
-            kwargs.get("task_id"),
-            kwargs["sender"].request.correlation_id,
+            task_id,
+            sender.request.correlation_id if hasattr(sender.request, 'correlation_id') else 'N/A',
         )
         + "\n"
-        + "".join(format_tb(kwargs.get("traceback", [])))
+        + formatted_traceback
         + "\n"
-        + str(kwargs.get("exception", ""))
+        + str(exception or "No Exception")
     )
 
