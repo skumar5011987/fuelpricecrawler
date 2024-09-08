@@ -94,11 +94,6 @@ API Endpoints
         ]
     }
 
-4. Crawl Fuel Prices
-    URL: http://localhost:8000/crawl-fuel-prices
-    Method: POST
-    Description: Triggers the crawling process to scrape and save fuel prices from the external source.
-
 Crawling Task:
     The crawling logic is handled by the CrawlAPIView, which fetches the petrol prices from the 'https://www.ndtv.com/fuel-prices' and stores the data in the FuelPrice model.
     Exception handling is implemented to ensure that the system skips pages or URLs that may not respond correctly.
@@ -107,7 +102,7 @@ Custom Management Command:
     Command Name: crawl_fuel_prices
     Trigger:
         python manage.py crawl_fuel_prices
-    Description: Manually triggers the fuel price crawler.
+    Description: Manually triggers the ndtv fuel price crawler.
 
 Task Scheduling:
     To schedule the crawling task periodically, Celery is used.
