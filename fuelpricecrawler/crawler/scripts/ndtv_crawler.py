@@ -25,7 +25,11 @@ def parse_page_url(city):
 def extract_fuelprice_history(city, source):
     
     state = source.find('span', class_="brdCrumb").find_all('a')[2].get_text()
-    last10_days_fp_tbl = source.find_all('table')[0]
+    try:
+        last10_days_fp_tbl = source.find_all('table')[0]
+    except Exception as e:
+        print(f"[Error]: Fuel Price History Not Available.")
+    
     rows = last10_days_fp_tbl.find_all("tr")
     rows.pop(0)
     rec ={
