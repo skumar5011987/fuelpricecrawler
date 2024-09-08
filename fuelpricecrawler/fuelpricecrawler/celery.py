@@ -19,7 +19,6 @@ app = Celery('fuelpricecrawler')
 
 app.config_from_object('django.conf:settings', namespace='CELERY')
 
-# Load task modules from all registered Django app configs.
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 @task_failure.connect
@@ -43,14 +42,14 @@ def handle_task_failure(**kwargs):
 def crwal_fuelprices(city="", page_url=""):
     
     if not (city and page_url):
-        print(f"City & Page url is required.")
+        _logger.error(f"City & Page url is required.")
         return
     
     try:
         if not page_url:
             url = parse_page_url(city)
         
-        print(f"[Info]: Crawling '{url}'")
+        _logger.error(f"[Info]: Crawling '{url}'")
         time.sleep(1)
         content = get_page_content(url)
         

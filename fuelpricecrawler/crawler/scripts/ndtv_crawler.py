@@ -1,3 +1,4 @@
+import logging
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.chrome.service import Service
@@ -7,6 +8,8 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from bs4 import BeautifulSoup
 from crawler.utils import parse_price, parse_date
+
+_logger = logging.getLogger(__name__)
 
 base_url = "https://www.ndtv.com/fuel-prices"
 
@@ -28,7 +31,7 @@ def extract_fuelprice_history(city, source):
     try:
         last10_days_fp_tbl = source.find_all('table')[0]
     except Exception as e:
-        print(f"[Error]: Fuel Price History Not Available.")
+        _logger.error(f"[Error]: Fuel Price History Not Available.")
     
     rows = last10_days_fp_tbl.find_all("tr")
     rows.pop(0)

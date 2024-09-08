@@ -1,4 +1,5 @@
 import time
+import logging
 from fuelpricecrawler.views import (BaseAPIView, APIResponse ,SUCCESS, FAIL,)
 from crawler.scripts.ndtv_crawler import (
     get_available_cities, parse_page_url, extract_fuelprice_history, get_page_content
@@ -7,6 +8,8 @@ from crawler.models.fuelprice import Location
 from .serializers import LocationSerializer
 from rest_framework import generics, views
 from django.core.cache import cache
+
+_logger = logging.getLogger(__name__)
 
 class HomeAPIView(views.APIView):
     def get(self, request):
@@ -53,14 +56,14 @@ class CrawlAPIView(BaseAPIView):
         try:
             cities = get_available_cities()
         except Exception as exc:
-            print(f"Exception: {exc}")
+            _logger.error(f"Exception: {exc}")
             return APIResponse(FAIL)
         
         for city in cities:
             try:
                 url = parse_page_url(city)
                 
-                print(f"[Info]: Crawling '{url}'")
+                _logger.error(f"[Info]: Crawling '{url}'")
                 time.sleep(1)
                 content = get_page_content(url)
                 if content is None:
@@ -70,8 +73,7 @@ class CrawlAPIView(BaseAPIView):
                 data = extract_fuelprice_history(city, content)
                 Location.create_data(data)
             except Exception as e:
-                print(f"[Error]: Crawling '{url}'")
-                print("Sceduling this to crawl later.")
+                _logger.error(f"[Error]: Crawling '{url}'")
                 
         
         return APIResponse(SUCCESS)

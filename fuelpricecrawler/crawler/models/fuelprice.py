@@ -1,4 +1,7 @@
+import logging
 from django.db import models
+
+_logger = logging.getLogger(__name__)
 
 class Location(models.Model):
     state = models.CharField("State", max_length=255)
