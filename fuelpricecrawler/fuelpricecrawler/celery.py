@@ -15,7 +15,7 @@ app = Celery('fuelpricecrawler')
 app.conf.enable_utc=False
 app.conf.update(timezone='Asia/Kolkata')
 app.config_from_object(settings, namespace='CELERY')
-app.autodiscover_tasks()
+app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
 # Celery Beat settings
 app.conf.beat_schedule = {
