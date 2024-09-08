@@ -19,7 +19,7 @@ class Command(BaseCommand):
             self.stdout.write(self.style.ERROR(f"[Error]: Can't extract cities list."))
             return
         
-        for city in cities[:2]:
+        for city in cities:
             try:
                 url = parse_page_url(city)
                 self.stdout.write(self.style.SUCCESS(f"[Info]: Crawling '{url}'"))

@@ -110,34 +110,61 @@ LOGGING = {
     "version": 1,
     "disable_existing_loggers": True,
     "handlers": {
-        "file": {
-            "level": "INFO",
-            "class": "logging.FileHandler",
-            "filename": "info.log",
-        },
         "console": {
-            "level": "INFO",
             "class": "logging.StreamHandler",
+            "level": "INFO",
         },
     },
     "loggers": {
-        "django": {
-            "handlers": ["file", "console"],
+        "": {
+            "handlers": ["console"],
             "level": "INFO",
-            "propagate": True,
+        },
+        "django": {
+            "handlers": ["console"],
+            "level": "INFO",
         },
         "celery": {
             "handlers": ["console"],
             "level": "INFO",
             "propagate": True,
         },
-        "crawler": {
-            "handlers": ["file", "console"],
-            "level": "INFO",
-            "propagate": True,
-        },
     },
 }
+
+if DEBUG:
+    LOGGING = {
+        "version": 1,
+        "disable_existing_loggers": True,
+        "handlers": {
+            "file": {
+                "level": "INFO",
+                "class": "logging.FileHandler",
+                "filename": "info.log",
+            },
+            "console": {
+                "level": "INFO",
+                "class": "logging.StreamHandler",
+            },
+        },
+        "loggers": {
+            "django": {
+                "handlers": ["file", "console"],
+                "level": "INFO",
+                "propagate": True,
+            },
+            "crawler": {
+                "handlers": ["file", "console"],
+                "level": "INFO",
+                "propagate": True,
+            },
+            "celery": {
+                "handlers": ["file", "console"],
+                "level": "INFO",
+                "propagate": True,
+            },
+        },
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -162,15 +189,15 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-CELERY_BROKER_URL = 'redis://127.0.0.1:6379'
-result_backend = 'redis://localhost:6379'
+CELERY_BROKER_URL = 'redis://127.0.0.1:6379/1'
+result_backend = 'redis://localhost:6379/1'
 RESULT_SERIALIZER = "json"
 CELERY_BROKER_CONNECTION_RETRY_ON_STARTUP = True
 
 CACHES = {
     'default': {
         'BACKEND': 'django_redis.cache.RedisCache',
-        'LOCATION': 'redis://localhost:6379',
+        'LOCATION': 'redis://localhost:6379/1',
         'OPTIONS': {
             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
         }

@@ -4,8 +4,6 @@ from fuelpricecrawler.views import (BaseAPIView, APIResponse ,SUCCESS, FAIL,)
 from crawler.scripts.ndtv_crawler import (
     get_available_cities, parse_page_url, extract_fuelprice_history, get_page_content
     )
-from crawler.models.fuelprice import Location
-from .serializers import LocationSerializer
 from rest_framework import generics, views
 from django.core.cache import cache
 
@@ -18,6 +16,8 @@ class HomeAPIView(views.APIView):
 class ListCitiesAPIView(generics.ListAPIView):
     
     def get(self, request):
+        from crawler.models.fuelprice import Location
+        
         cache_key = "cities"
         cities = cache.get(cache_key)
         if not cities:
@@ -29,6 +29,9 @@ class ListCitiesAPIView(generics.ListAPIView):
 class FuelPricesAPIView(generics.ListAPIView):
     
     def get(self, request):
+        from crawler.models.fuelprice import Location
+        from .serializers import LocationSerializer
+        
         params = request.query_params.copy()
         city, state = params.get("city",""), params.get("state","")
         city, state = " ".join(city.split("-")).title(), " ".join(state.split("-")).title()
@@ -49,29 +52,11 @@ class FuelPricesAPIView(generics.ListAPIView):
         return APIResponse(SUCCESS, data=data)
 
 
-class CrawlAPIView(BaseAPIView):
+# class CrawlAPIView(BaseAPIView):
     
-    def post(self, request):
-        from fuelpricecrawler.celery import crwal_fuelprices
+#     def post(self, request):
+#         from .tasks import run_ndtv_fuel_prices
         
-        try:
-            cities = get_available_cities()
-        except Exception as exc:
-            _logger.error(f"Exception: {exc}")
-            return APIResponse(FAIL)
+#         run_ndtv_fuel_prices.apply_async()
+#         return APIResponse(SUCCESS, message="Crawling started.")
         
-        for city in cities:
-            try:
-                url = parse_page_url(city)
-                
-                _logger.error(f"[Info]: Crawling '{url}'")
-                time.sleep(1)
-                content = get_page_content(url)
-                data = extract_fuelprice_history(city, content)
-                Location.create_data(data)
-            except Exception as e:
-                _logger.error(f"[Error]: Crawling '{url}'")
-                _logger.info(f"Scheduling to crawl '{url}'")
-                crwal_fuelprices.apply_async(city=city, countdown=10)
-        
-        return APIResponse(SUCCESS)

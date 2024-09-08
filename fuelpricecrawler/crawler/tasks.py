@@ -1,27 +1,9 @@
 import logging
 import time
 from fuelpricecrawler.celery import app
-# from celery.signals import task_failure
 from django.core.management import call_command
 
 _logger = logging.getLogger(__name__)
-
-
-# @task_failure.connect
-# def handle_task_failure(**kwargs):
-#     from traceback import format_tb
-
-#     _logger.error(
-#         "[task:%s:%s]"
-#         % (
-#             kwargs.get("task_id"),
-#             kwargs["sender"].request.correlation_id,
-#         )
-#         + "\n"
-#         + "".join(format_tb(kwargs.get("traceback", [])))
-#         + "\n"
-#         + str(kwargs.get("exception", ""))
-#     )
 
 
 @app.task
