@@ -70,6 +70,7 @@ Installation and Setup:
     PONG
     OR
     first install and run redis server
+    Link: https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/
 
 API Endpoints
 1. Home
