@@ -52,7 +52,12 @@ class CrawlAPIView(BaseAPIView):
         
         try:
             cities = get_available_cities()
-            for city in cities:
+        except Exception as exc:
+            print(f"Exception: {exc}")
+            return APIResponse(FAIL)
+        
+        for city in cities:
+            try:
                 url = parse_page_url(city)
                 
                 print(f"[Info]: Crawling '{url}'")
@@ -63,9 +68,10 @@ class CrawlAPIView(BaseAPIView):
                     continue
                 
                 data = extract_fuelprice_history(city, content)
-                
                 Location.create_data(data)
-            return APIResponse(SUCCESS)
-        except Exception as e:
-            print(f"Error while crawling: error msg: {e}")
-            return APIResponse(FAIL)
+            except Exception as e:
+                print(f"[Error]: Crawling '{url}'")
+                print("Sceduling this to crawl later.")
+                
+        
+        return APIResponse(SUCCESS)

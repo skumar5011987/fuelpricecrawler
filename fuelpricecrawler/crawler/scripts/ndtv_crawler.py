@@ -48,19 +48,15 @@ def extract_fuelprice_history(city, source):
 
 def get_page_content(page_url):
     
-    try:
-        # Load the page
-        driver.get(page_url)
-        WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "city_selct"))
-        )
-        page_source = driver.page_source
-        soup = BeautifulSoup(page_source, "html.parser")
-        
-        return soup
-    except Exception as e:
-        print(f"Exception while crawling : {page_url}")
+    # Load the page
+    driver.get(page_url)
+    WebDriverWait(driver, 2).until(
+        EC.presence_of_element_located((By.CLASS_NAME, "city_selct"))
+    )
+    page_source = driver.page_source
+    soup = BeautifulSoup(page_source, "html.parser")
     
+    return soup
     
 def get_available_cities():
     CITIES = []
