@@ -8,12 +8,13 @@ from fuelpricecrawler.celery import app
 _logger = logging.getLogger(__name__)
 
 @app.task
-def ndtv_fuel_prices():
+def ndtv_fuel_prices_command():
     try:
         call_command('ndtv_fuel_prices')
         
-    except Exception as e:
-        _logger.error(f"Exception in ndtv_fuel_prices command: {e}")
+    except Exception as exc:
+        _logger.exception(exc)
+        ndtv_fuel_prices_command.retry(countdown=900, exc=exc)
 
 
 @app.task(name="crawl_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
