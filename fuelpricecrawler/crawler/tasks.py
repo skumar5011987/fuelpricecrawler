@@ -14,7 +14,7 @@ def ndtv_fuel_prices_command():
         
     except Exception as exc:
         _logger.exception(exc)
-        ndtv_fuel_prices_command.retry(countdown=900, exc=exc)
+        ndtv_fuel_prices_command.retry(countdown=300, exc=exc)
 
 
 @app.task(name="crwal_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
