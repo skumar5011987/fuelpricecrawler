@@ -17,7 +17,7 @@ def ndtv_fuel_prices_command():
         ndtv_fuel_prices_command.retry(countdown=900, exc=exc)
 
 
-@app.task(name="crawl_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
+@app.task(name="crwal_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
 def crwal_ndtv_fuelprices(city=""):
     from crawler.models.fuelprice import Location
     from crawler.scripts.ndtv_crawler import (
