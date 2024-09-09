@@ -25,7 +25,7 @@ class LocationSerializer(serializers.ModelSerializer):
         )
         
         for fuelprice in fuelprices:
-            FuelPrice.objects.get_or_create(
+            FuelPrice.objects.update_or_create(
                 city=city_obj,
                 fuel=fuelprice['fuel'],
                 date=fuelprice['date'],
