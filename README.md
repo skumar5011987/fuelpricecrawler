@@ -120,7 +120,7 @@ Setup Celery:
         pip install redis celery
 
 Start Celery worker:
-    celery -A fuelpricecrwaler worker -l info
+    celery -A fuelpricecrwaler worker --pool=solo -l info
 
 Start Celery Beat:
     celery -A fuelpricecrwaler beat -l info
