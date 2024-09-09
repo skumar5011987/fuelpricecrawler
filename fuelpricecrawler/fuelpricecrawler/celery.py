@@ -22,7 +22,7 @@ app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 app.conf.beat_schedule = {
     'ndtv_fuel_prices_daily': {
         'task': 'crawler.tasks.ndtv_fuel_prices_command',
-        'schedule': crontab(hour=13, minute=57),
+        'schedule': crontab(hour=7, minute=30),
     }
 }
 
