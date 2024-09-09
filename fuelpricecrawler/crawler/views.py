@@ -50,13 +50,3 @@ class FuelPricesAPIView(generics.ListAPIView):
             cache.set(cache_key, data, timeout=3*60*60)
             
         return APIResponse(SUCCESS, data=data)
-
-
-# class CrawlAPIView(BaseAPIView):
-    
-#     def post(self, request):
-#         from .tasks import run_ndtv_fuel_prices
-        
-#         run_ndtv_fuel_prices.apply_async()
-#         return APIResponse(SUCCESS, message="Crawling started.")
-        

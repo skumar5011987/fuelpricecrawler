@@ -112,21 +112,21 @@ LOGGING = {
     "handlers": {
         "console": {
             "class": "logging.StreamHandler",
-            "level": "INFO",
+            "level": "ERROR",
         },
     },
     "loggers": {
         "": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "ERROR",
         },
         "django": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "ERROR",
         },
         "celery": {
             "handlers": ["console"],
-            "level": "INFO",
+            "level": "ERROR",
             "propagate": True,
         },
     },

@@ -12,17 +12,18 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'fuelpricecrawler.settings')
 _logger = get_task_logger(__name__)
 
 app = Celery('fuelpricecrawler')
-app.conf.enable_utc=False
+app.conf.enable_utc = False
 app.conf.update(timezone='Asia/Kolkata')
-app.config_from_object(settings, namespace='CELERY')
+app.config_from_object('django.conf:settings', namespace='CELERY')
 app.autodiscover_tasks(lambda: settings.INSTALLED_APPS)
 
-# Celery Beat settings
+
+# Schedule management command
 app.conf.beat_schedule = {
     'ndtv_fuel_prices_daily': {
         'task': 'crawler.tasks.run_ndtv_fuel_prices',
-        'schedule': crontab(hour=7, minute=30),
-    },
+        'schedule': crontab(hour=13, minute=36),
+    }
 }
 
 @task_failure.connect
@@ -45,4 +46,3 @@ def handle_task_failure(sender=None, task_id=None, exception=None, traceback=Non
         + "\n"
         + str(exception or "No Exception")
     )
-

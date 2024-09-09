@@ -1,18 +1,19 @@
 import logging
 import time
-from fuelpricecrawler.celery import app
 from django.core.management import call_command
+
+from fuelpricecrawler.celery import app
+
 
 _logger = logging.getLogger(__name__)
 
-
 @app.task
-def run_ndtv_fuel_prices():
+def ndtv_fuel_prices():
     try:
         call_command('ndtv_fuel_prices')
+        
     except Exception as e:
-        _logger.error(f"Exception in run_ndtv_fuel_prices: {e}")
-        raise
+        _logger.error(f"Exception in ndtv_fuel_prices command: {e}")
 
 
 @app.task(name="crawl_ndtv_fuelprices", max_retries=3, retry_backoff=True, rate_limit="300/m")
