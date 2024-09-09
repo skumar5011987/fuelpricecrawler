@@ -22,7 +22,7 @@ class ListCitiesAPIView(generics.ListAPIView):
         cities = cache.get(cache_key)
         if not cities:
             cities = list(Location.objects.all().values_list("city", flat=True))
-            cache.set(cache_key, cities, timeout=6*60*60)
+            cache.set(cache_key, cities, timeout=10*60)
             
         return APIResponse(SUCCESS, message="Available cities", data=cities)
     

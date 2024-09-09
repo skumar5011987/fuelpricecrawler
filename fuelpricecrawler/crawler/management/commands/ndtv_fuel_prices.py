@@ -1,4 +1,5 @@
 import time
+from django.core.cache import cache
 from django.core.management import BaseCommand
 from crawler.tasks import crwal_ndtv_fuelprices
 
@@ -31,5 +32,8 @@ class Command(BaseCommand):
                 self.stdout.write(self.style.ERROR(f"[Error]: Crawling '{url}'"))
                 self.stdout.write(self.style.WARNING(f"Scheduling to crawl '{url}'"))
                 crwal_ndtv_fuelprices.delay(city=str(city))
-            
+        try:
+            cache.delete("cities")
+        except:
+            pass
         self.stdout.write(self.style.SUCCESS("Completed"))
