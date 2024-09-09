@@ -27,6 +27,9 @@ def parse_page_url(city):
     return url
 
 def extract_fuelprice_history(city, source):
+    if not source:
+        return {}
+    
     
     state = source.find('span', class_="brdCrumb").find_all('a')[2].get_text()
     try:

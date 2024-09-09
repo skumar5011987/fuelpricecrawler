@@ -17,6 +17,8 @@ class Location(models.Model):
         serializer = LocationSerializer(data=results)
         if serializer.is_valid():
             obj = serializer.create_fuelprice(serializer.validated_data)
+        else:
+            raise
     
 class FuelPrice(models.Model):
     
