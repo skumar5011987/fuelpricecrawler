@@ -1,9 +1,13 @@
 # FuelPriceCrawler
  Fuel Price Crawler and API
 
+
+
 Overview
 
 This project is a Django-based solution designed to crawl daily updated fuel prices (petrol) from 'https://www.ndtv.com/fuel-prices', store them locally in a PostgreSQL database, and exposes API's to retrieve cities & fuel prices for a given city and state. The system is robust, scalable, and handles errors gracefully.
+
+
 
 Main Features:
 
@@ -11,6 +15,8 @@ Main Features:
 2. API to display petrol prices for a specific city and state over the last 7 days.
 3. Custom Django management command to trigger the crawling process.
 4. Celery task task scheduler to run management command daily.
+
+
 
 Table of Contents:
 
@@ -23,6 +29,8 @@ Table of Contents:
 7. Caching
 8. Error Handling
 
+
+
 Technologies Used:
 
 1. Python: 3.9+
@@ -32,7 +40,10 @@ Technologies Used:
 5. Redis: 5.x (for caching and Celery)
 7. BeautifulSoup4 & Selenium: For crawling
 
+
+
 Installation and Setup:
+
 1. Create a virtual environment:
 
     conda create -n venv python==3.11
@@ -41,19 +52,27 @@ Installation and Setup:
     python -m venv venv
     source venv/bin/activate # On Windows: venv\Scripts\activate
 
+
+
 2. Clone the repository:
 
     git clone 'https://github.com/skumar5011987/fuelpricecrawler.git'
     cd fuelpricecrawler
 
+
+
 3. Install the dependencies:
 
     pip install -r requirements.txt
+
+
 
 4. Set up PostgreSQL:
 
     Install PostgreSQL(14.+) and create a database
     Install PGAdmin4 for Database GUI for adimn
+
+
 
 5. Update settings.py with your database configuration:
 
@@ -68,13 +87,19 @@ Installation and Setup:
         }
     }
 
+
+
 6. Run migrations:
 
     python manage.py migrate
 
+
+
 7. Start the development server:
 
     python manage.py runserver
+
+
 
 8. Makesure redis is up and running:
 
@@ -84,6 +109,8 @@ Installation and Setup:
     first install and run redis server
     Link: https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/
 
+
+
 API Endpoints:
 
 1. Home:
@@ -92,11 +119,15 @@ API Endpoints:
     Method: GET
     Description: Welcome, Check Petrol price for all states and cities in India.
 
+
+
 2. List Available Cities:
 
     URL: http://localhost:8000/list-cities
     Method: GET
     Description: Retrieves a list of all available cities for which fuel prices have been crawled.
+
+
 
 3. Fuel Prices for a City/State:
 
@@ -117,10 +148,14 @@ API Endpoints:
         ]
     }
 
+
+
 Crawling Task:
 
     The crawling logic is handled by the CrawlAPIView, which fetches the petrol prices from the 'https://www.ndtv.com/fuel-prices' and stores the data in the FuelPrice model.
     Exception handling is implemented to ensure that the system skips pages or URLs that may not respond correctly.
+
+
 
 Custom Management Command:
 
@@ -129,9 +164,13 @@ Custom Management Command:
         python manage.py crawl_fuel_prices
     Description: Manually triggers the ndtv fuel price crawler.
 
+
+
 Task Scheduling:
 
     To schedule the crawling task periodically, Celery is used.
+
+
 
 Setup Celery:
 
@@ -139,17 +178,25 @@ Setup Celery:
     Install Redis and Celery manually
         pip install redis celery
 
+
+
 Start Celery worker:
 
     celery -A fuelpricecrwaler worker --pool=solo -l info
+
+
 
 Start Celery Beat:
 
     celery -A fuelpricecrwaler beat -l info
 
+
+
 Caching:
 
     To reduce frequent hits on the database for the same data, caching has been implemented using Redis. Make sure to install Redis and configure it in settings.py.
+
+
 
 Error Handling:
 
