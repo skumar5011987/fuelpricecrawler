@@ -89,7 +89,7 @@
 
 > Update settings.py with your database configuration
 
-> ```
+```
  DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
