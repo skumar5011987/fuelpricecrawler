@@ -204,7 +204,7 @@
 
 ## Start Celery worker
 
-- celery -A fuelpricecrwaler worker --pool=solo -l (for windows)
+- celery -A fuelpricecrwaler worker --pool=solo -l info (for windows)
 > or
 - celery _A fuelpricecrawler worker -l info (for linux)
 
