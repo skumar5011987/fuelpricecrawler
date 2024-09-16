@@ -89,7 +89,8 @@
 
 > Update settings.py with your database configuration
 
-> ```DATABASES = {
+> ```
+ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fuelprices',
@@ -98,7 +99,8 @@
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}```
+}
+```
 
 
 > Run migrations
@@ -115,13 +117,13 @@
 
 - redis-cli ping
 
-- PONG
+> PONG
 
 - OR
 
-- first install and run redis server
+> first install and run redis server
 
-- 'Link': ['install-redis'](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/)
+> 'Link': ['install-redis'](https://redis.io/docs/latest/operate/oss_and_stack/install/install-stack/)
 
 
 ## API Endpoints
@@ -157,7 +159,9 @@
     - state (optional)
     
 - Sample Response:
-     {
+
+```
+    {
      "city": "New Delhi",
      "state": "Delhi",
      "data": [
@@ -165,6 +169,7 @@
             {"date": "2023-08-02", "fuel": "petrol", "price": 96.50}
        ]
     }
+```
 
 
 ## Crawling Task
