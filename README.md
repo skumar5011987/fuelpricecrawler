@@ -184,9 +184,8 @@
 
 > Command Name: crawl_fuel_prices
 
-> Trigger:
-
-- python manage.py crawl_fuel_prices
+- Trigger:
+    - python manage.py crawl_fuel_prices
 
 - Description: Manually triggers the ndtv fuel price crawler.
 
@@ -196,9 +195,9 @@
 > To schedule the crawling task periodically, Celery is used.
 
 
-> Setup Celery
+## Setup Celery
 
-- Celery & Redis get installed withe requirements or 
+> Celery & Redis get installed withe requirements or 
 - Install Redis and Celery manually
     - pip install redis celery
 
@@ -206,7 +205,7 @@
 ## Start Celery worker
 
 - celery -A fuelpricecrwaler worker --pool=solo -l (for windows)
-- or
+> or
 - celery _A fuelpricecrawler worker -l info (for linux)
 
 
