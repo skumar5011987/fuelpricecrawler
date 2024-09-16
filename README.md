@@ -89,7 +89,7 @@
 
 > Update settings.py with your database configuration
 
-> '''DATABASES = {
+> ```DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'fuelprices',
@@ -98,7 +98,7 @@
         'HOST': 'localhost',
         'PORT': '5432',
     }
-}'''
+}```
 
 
 > Run migrations
